@@ -1,5 +1,5 @@
 <template>
   <div class="about">
-    fdjfdls
+    about
   </div>
 </template>
