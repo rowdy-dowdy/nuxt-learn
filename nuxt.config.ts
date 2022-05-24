@@ -10,6 +10,9 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/sitemap'
   ],
+  publicRuntimeConfig: {
+    app_url: process.env.app_url
+  },
   sitemap: {
     // options
   },

@@ -16,6 +16,7 @@
     "@nuxtjs/tailwindcss": "^5.0.4",
     "@pinia/nuxt": "^0.1.9",
     "express": "^4.18.1",
+    "mongoose": "^6.3.4",
     "pinia": "^2.0.14"
   }
 }

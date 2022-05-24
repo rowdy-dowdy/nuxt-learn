@@ -1,23 +1,22 @@
 import express from 'express'
-// import { PrismaClient } from '@prisma/client'
-
-// const prisma = new PrismaClient()
+import mongoose from 'mongoose'
 const app = express()
 
+mongoose
+  .connect(process.env.db_url)
+  .then(() => {
+    console.log("Database is connected");
+  })
+  .catch(err => {
+    console.log({ database_error: err });
+  });
+
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json())
 
-/** 
-* logic for our api will go here
-*/
+import userRoutes from './router/user'
 
-app.get(`/api/test`, async (req, res) => {
-  // const result = await prisma.user.create({
-  //   data: {
-  //     email: req.body.email,
-  //     name: req.body.name,
-  //   },
-  // })
-  res.json("user")
-})
+app.use("/api", userRoutes);
+
 
 export default app

@@ -3,7 +3,7 @@ const links = [
   {title: "Home", path: "/"},
   {title: "About", path: "/about"},
   {title: "Todo", path: "/todo"},
-  {title: "Contact", path: "/contact"}
+  // {title: "Contact", path: "/contact"}
 ]
 </script>
 

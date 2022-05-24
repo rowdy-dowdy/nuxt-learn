@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const { data } = await useFetch('http://localhost:3000/api/test', {method: 'get'})
-console.log(data.value)
+const config = useRuntimeConfig();
+const { data } = await useFetch(`${config.app_url}/api/users`, {method: 'get'})
 </script>
 
 <template>
