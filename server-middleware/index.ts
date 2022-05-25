@@ -11,12 +11,17 @@ mongoose
     console.log({ database_error: err });
   });
 
+import './model/task'
+import './model/board'
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json())
 
 import userRoutes from './router/user'
+import boardRoutes from './router/board'
 
-app.use("/api", userRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/boards", boardRoutes);
 
 
 export default app

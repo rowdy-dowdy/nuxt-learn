@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   serverMiddleware: [
     '~/server-middleware/index.ts'
   ],
+  plugins: ['~/plugins/vue-click-outside.ts'],
   buildModules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',

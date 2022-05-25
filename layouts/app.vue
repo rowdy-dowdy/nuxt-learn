@@ -11,7 +11,11 @@
 </template>
 
 <style>
-  input, button {
+  /* input, button {
     @apply focus:outline-none;
+  } */
+
+  * {
+    @apply border-gray-300;
   }
 </style>
