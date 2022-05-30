@@ -1,0 +1,130 @@
+[
+  {
+    "_id": "254151b0-5a21-45dc-94b3-da7146d2b7fa",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:3000/api//auth/register",
+    "url": "localhost:3000/api//auth/register",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2022-05-30T05:44:39.772Z",
+    "modified": "2022-05-30T05:44:39.908Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "4fa8c817-9bf2-4685-bb92-4a562cc6cc0b",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:3000/api/auth/register",
+    "url": "localhost:3000/api/auth/register",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2022-05-30T05:44:44.785Z",
+    "modified": "2022-05-30T06:43:04.561Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"   Việt Hùng   \",\n    \"email\": \"    viet.hung.2898@gmail.com\",\n    \"password\": \"Admin123!\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "7cba41b6-8492-4e1b-a369-e673ddd10e9b",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:3000/api/auth/login",
+    "url": "localhost:3000/api/auth/login",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2022-05-30T07:05:46.658Z",
+    "modified": "2022-05-30T09:28:46.663Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"   Việt Hùng   \",\n    \"email\": \"    viet.hung.2898@gmail.com\",\n    \"password\": \"Admin123!\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "b880863e-d975-442b-9f51-ea15c3054aa0",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:3000/clear",
+    "url": "localhost:3000/clear",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2022-05-30T09:29:24.476Z",
+    "modified": "2022-05-30T09:29:42.078Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"   Việt Hùng   \",\n    \"email\": \"    viet.hung.2898@gmail.com\",\n    \"password\": \"Admin123!\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "565ff9d1-7183-4a80-99b2-5422f68aa92f",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:3000/clear",
+    "url": "localhost:3000/clear",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2022-05-30T09:30:31.522Z",
+    "modified": "2022-05-30T09:30:46.785Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"   Việt Hùng   \",\n    \"email\": \"    viet.hung.2898@gmail.com\",\n    \"password\": \"Admin123!\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "877bd8f3-c1af-4379-9f6a-8b8653a6d7e8",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:3000/api/clear",
+    "url": "localhost:3000/api/clear",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2022-05-30T09:32:25.146Z",
+    "modified": "2022-05-30T09:54:50.122Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"   Việt Hùng   \",\n    \"email\": \"    viet.hung.2898@gmail.com\",\n    \"password\": \"Admin123!\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "402d7fac-0253-4799-857a-68614d8ff6a6",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:3000/api/clearf",
+    "url": "localhost:3000/api/auth/login",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2022-05-30T09:58:18.862Z",
+    "modified": "2022-05-30T10:36:59.589Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"   Việt Hùng   \",\n    \"email\": \"    viet.hung.2898@gmail.com\",\n    \"password\": \"Admin123!\"\n}",
+      "form": []
+    },
+    "tests": []
+  }
+]

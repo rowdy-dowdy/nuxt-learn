@@ -11,8 +11,19 @@ datasource db {
 }
 
 model users {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String   @db.VarChar(255)
-  password  String   @db.VarChar(255)
+  id            Int           @id @default(autoincrement())
+  email         String        @unique
+  name          String        @db.VarChar(255)
+  password      String        @db.VarChar(255)
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+}
+
+model users {
+  id            Int           @id @default(autoincrement())
+  email         String        @unique
+  name          String        @db.VarChar(255)
+  password      String        @db.VarChar(255)
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
 }
