@@ -1,6 +1,8 @@
 import express from 'express'
 const app = express()
 
+// app.use(cookieParser());
+app.set("trust proxy")
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json())
 

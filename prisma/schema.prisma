@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["filterJson"]
 }
 
 datasource db {
@@ -11,19 +12,20 @@ datasource db {
 }
 
 model users {
-  id            Int           @id @default(autoincrement())
-  email         String        @unique
-  name          String        @db.VarChar(255)
-  password      String        @db.VarChar(255)
-  created_at    DateTime      @default(now())
-  updated_at    DateTime      @updatedAt
+  id         Int             @id @default(autoincrement())
+  email      String          @unique
+  name       String          @db.VarChar(255)
+  password   String          @db.VarChar(255)
+  created_at DateTime        @default(now())
+  updated_at DateTime        @updatedAt
+  providers  user_providers?
 }
 
-model users {
-  id            Int           @id @default(autoincrement())
-  email         String        @unique
-  name          String        @db.VarChar(255)
-  password      String        @db.VarChar(255)
-  created_at    DateTime      @default(now())
-  updated_at    DateTime      @updatedAt
+model user_providers {
+  id         Int      @id @default(autoincrement())
+  list_id    Json?
+  user_id    Int      @unique
+  user       users    @relation(fields: [user_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }

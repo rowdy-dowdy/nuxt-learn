@@ -23,7 +23,8 @@ const login = async (req, res) => {
         id: true,
         name: true,
         email: true,
-        password: true
+        password: true,
+        providers: true
       }
     })
 
@@ -33,6 +34,30 @@ const login = async (req, res) => {
         message: "Email not exists"
       }
     }
+
+    var list_id = user.providers?.list_id || []
+
+    console.log(req.headers['x-forwarded-for'], req.ip, res.ips)
+
+    return
+
+    // update list id
+    await prisma.users.update({
+      where: {id: user.id},
+      data: {
+        providers: {
+          // update or create 
+          upsert: {
+            create: {
+              list_id: list_id
+            },
+            update: {
+              list_id: list_id
+            },
+          },
+          }
+      }
+  })
 
     if (!await bcrypt.compare(password, user.password)) {
       throw {
@@ -44,11 +69,14 @@ const login = async (req, res) => {
     delete user.password
 
     const token = await signToken(user)
-    console.log(token)
+    const refresh_token = await signToken(user, 86400)
+    res.cookie('refresh_token',refresh_token, { maxAge: 86400, httpOnly: true });
 
     res.status(200).json({
       user,
-      token
+      token,
+      expiresIn: '1h',
+      refresh_token
     });
 
   } catch (error) {
@@ -165,8 +193,38 @@ const me = async (req, res) => {
   }
 }
 
+const refresh_token = async(req, res) => {
+  try {
+    var user = await prisma.users.findUnique({
+      where: {
+        id: req?.user?.id || 0
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true
+      }
+    })
+
+    if (!user) {
+      throw {
+        status: 404,
+        message: "User not exists"
+      }
+    }
+
+    res.status(200).json({
+      user
+    });
+
+  } catch (error) {
+    res.status(error.status || 500).json(responseError(error));
+  }
+}
+
 router.post('/login', login)
 router.post('/register', register)
 router.get('/me', me)
+router.post('/refresh_token', refresh_token)
 
 export default router

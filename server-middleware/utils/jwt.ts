@@ -15,13 +15,13 @@ const verifyToken = async (token) => {
   }
 };
 
-const signToken = async (data) => {
+const signToken = async (data, time = 3600) => {
   try {
     const token = await jwt.sign({
       id: data.id,
       name: data.name,
       email: data.email
-    }, token_key, { expiresIn: 60 * 60 })
+    }, token_key, { expiresIn: time })
 
     return token
 
