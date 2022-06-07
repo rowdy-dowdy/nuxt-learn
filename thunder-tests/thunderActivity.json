@@ -37,11 +37,11 @@
     "colId": "history",
     "containerId": "",
     "name": "localhost:3000/api/auth/login",
-    "url": "localhost:3000/api/auth/login",
+    "url": "localhost/api/auth/login",
     "method": "POST",
     "sortNum": 0,
     "created": "2022-05-30T07:05:46.658Z",
-    "modified": "2022-05-31T10:25:19.429Z",
+    "modified": "2022-06-07T03:36:33.788Z",
     "headers": [],
     "params": [],
     "body": {

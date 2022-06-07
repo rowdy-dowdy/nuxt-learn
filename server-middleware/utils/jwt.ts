@@ -10,7 +10,7 @@ const verifyToken = async (token) => {
   } catch (err) {
     throw {
       status: 401,
-      message: "Invalid Token"
+      text: "Invalid Token"
     }
   }
 };
@@ -28,7 +28,7 @@ const signToken = async (data, time = 3600) => {
   } catch (err) {
     throw {
       status: 500,
-      message: "Not created jwt token"
+      text: "Not created jwt token"
     }
   }
 };

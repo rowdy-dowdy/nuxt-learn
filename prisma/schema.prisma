@@ -2,12 +2,12 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["filterJson"]
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -23,9 +23,14 @@ model users {
 
 model user_providers {
   id         Int      @id @default(autoincrement())
-  list_id    Json?
+  list_id    String[]
   user_id    Int      @unique
   user       users    @relation(fields: [user_id], references: [id])
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+}
+
+model refresh_tokens {
+  id    Int    @id @default(autoincrement())
+  token String
 }

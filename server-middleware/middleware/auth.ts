@@ -1,17 +1,25 @@
 import { verifyToken } from '../utils/jwt'
+import { responseError } from '../utils/response';
 
 const auth = async (req, res, next) => {
-  const token =
-    req.body.token || req.query.token || req.headers["x-access-token"];
-
-  if (!token) {
-    return res.status(403).send({ message: "A token is required for authentication" });
-  }
   try {
+    const token = req.body.token || req.query.token || req.headers.authorization.split(' ')[1];
+
+    if (!token) {
+      return res.status(403).send(responseError({
+        status: 403,
+        text: 'A token is required for authentication'
+      }));
+    }
+
     const decoded = await verifyToken(token);
     req.user = decoded;
-  } catch (err) {
-    return res.status(401).send({ message: "Invalid Token" });
+
+  } catch (error) {
+    return res.status(401).send(responseError({
+      status: 401,
+      text: 'Invalid Token'
+    }));
   }
   return next();
 };

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const config = useRuntimeConfig();
-console.log(config.app_url)
+// console.log(config.app_url)
 const { data } = await useFetch(`${config.app_url}/api/hello`, {method: 'get'})
 </script>
 
