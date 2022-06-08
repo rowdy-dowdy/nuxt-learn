@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .h-center {
+    @apply flex flex-col after:content-[''] after:flex-grow-0 before:content-[''] before:flex-grow-0;
+  }
+}

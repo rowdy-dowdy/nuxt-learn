@@ -9,6 +9,7 @@ import { responseError } from '../utils/response'
 import { User } from '~~/types/user'
 import bcrypt from 'bcrypt'
 import { signToken, verifyToken } from '../utils/jwt'
+import { auth } from "../middleware/auth";
 // import requestIp from 'request-ip';
 
 const login = async (req, res) => {
@@ -306,8 +307,8 @@ const logout = async(req, res) => {
 
 router.post('/login', login)
 router.post('/register', register)
-router.get('/me', me)
+router.get('/me', auth, me)
 router.post('/refresh_token', refresh_token)
-router.post('/logout', logout)
+router.post('/logout', auth, logout)
 
 export default router

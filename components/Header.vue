@@ -3,6 +3,7 @@ const links = [
   {title: "Home", path: "/"},
   {title: "Lead", path: "/lead"},
   {title: "Todo", path: "/todo"},
+  {title: "Login", path: "/auth/login"},
   // {title: "Contact", path: "/contact"}
 ]
 </script>
