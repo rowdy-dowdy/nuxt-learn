@@ -4,6 +4,14 @@
 
 @layer components {
   .h-center {
-    @apply flex flex-col after:content-[''] after:flex-grow-0 before:content-[''] before:flex-grow-0;
+    @apply flex flex-col after:content-[''] after:flex-grow before:content-[''] before:flex-grow;
+  }
+
+  .bg-full {
+    @apply absolute w-full h-full top-0 left-0;
+  }
+
+  .icon svg{
+    @apply w-full h-full;
   }
 }
