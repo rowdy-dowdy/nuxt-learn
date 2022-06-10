@@ -7,10 +7,6 @@ const is_remember    = ref(false)
 
 <template>
   <div class="flex h-full rounded-2xl shadow-lg overflow-hidden border border-gray-200">
-    <div class="hidden lg:flex w-1/2 bg-blue-700/90 rounded overflow-hidden h-center">
-      <auth-slide></auth-slide>
-    </div>
-
     <div class="flex-grow min-w-0 bg-white px-6 py-8">
       <div class="flex flex-col w-full h-full max-w-xs mx-auto">
         <div class="mt-12">
@@ -60,9 +56,13 @@ const is_remember    = ref(false)
 
         <div class="mt-auto pt-12 text-center font-semibold">
           <span class="text-gray-500">Don't have an account yet?</span>
-          <nuxt-link to="/auth/register" class="text-blue-600 pl-4">Sign Up</nuxt-link>
+          <nuxt-link to="/auth/login" class="text-blue-600 pl-4">Sign In</nuxt-link>
         </div>
       </div>
+    </div>
+
+    <div class="hidden lg:flex w-1/2 bg-blue-700/90 rounded overflow-hidden h-center">
+      <auth-slide></auth-slide>
     </div>
   </div>
 </template>

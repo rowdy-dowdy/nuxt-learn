@@ -6,9 +6,12 @@
   Swiper.use([Pagination,Autoplay]);
 
   var swiper = null
+  const id_component = 'swiper' + Math.random().toString(16).slice(2)
+  const ref_slide = ref<HTMLElement>(null)
 
   onMounted(() => {
-    swiper = new Swiper('#auth_slide', {
+    console.log(id_component)
+    swiper = new Swiper('#' + id_component, {
       loop: true,
 
       // If we need pagination
@@ -18,16 +21,32 @@
     });
   })
 
+  onActivated(() => {
+    console.log(1)
+  })
+
   const list_slide = ref([
-    {image: '/assets/images/home_slide_1.png'},
-    {image: '/assets/images/home_slide_2.png'},
-    {image: '/assets/images/home_slide_3.png'}
+    {
+      image       : '/assets/images/home_slide_1.png' ,
+      title       : 'Change the quality of the life' ,
+      description : 'Lorem ipsum dolor sit amet consec tetur adipisicing elit.'
+    },
+    {
+      image       : '/assets/images/home_slide_2.png' ,
+      title       : 'Change the quality of the life' ,
+      description : 'Lorem ipsum dolor sit amet consec tetur adipisicing elit.'
+    },
+    {
+      image       : '/assets/images/home_slide_3.png' ,
+      title       : 'Change the quality of the life' ,
+      description : 'Lorem ipsum dolor sit amet consec tetur adipisicing elit.'
+    },
   ])
 </script>
 
 <template>
   <div class="w-full">
-    <div id="auth_slide" class="swiper">
+    <div ref="ref_slide" :id="id_component" class="swiper auth_slide">
       <div class="swiper-wrapper">
         <div
           v-for="(value, index) in list_slide" :key="index"
@@ -39,8 +58,8 @@
               </div>
             </div>
             <div class="px-12 text-center">
-              <h3 class="text-2xl font-bold">Change the quality of the life</h3>
-              <p class="mt-2 text-sm">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+              <h3 class="text-2xl font-bold">{{ value.title }}</h3>
+              <p class="mt-2 text-sm">{{ value.description }}</p>
             </div>
           </div>
         </div>
@@ -51,11 +70,11 @@
   </div>
 </template>
 
-<style>
-#auth_slide .swiper-pagination-bullet {
+<style global>
+.auth_slide .swiper-pagination-bullet {
   @apply mx-0.5 w-1.5 h-1.5 bg-white rounded-full transition-all duration-300;
 }
-#auth_slide .swiper-pagination-bullet.swiper-pagination-bullet-active {
+.auth_slide .swiper-pagination-bullet.swiper-pagination-bullet-active {
   @apply w-4;
 }
 </style>

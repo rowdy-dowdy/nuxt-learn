@@ -1,15 +1,16 @@
-const colors = require('tailwindcss/colors')
+const defaultTheme  = require('tailwindcss/defaultTheme')
 
 module.exports = {
   content: [
-    "./components/**/*.{js,vue,ts}",
-    "./layouts/**/*.vue",
-    "./pages/**/*.vue",
-    "./plugins/**/*.{js,ts}",
-    // "./nuxt.config.{js,ts}",
+    'components/**/*.vue',
+    'layouts/**/*.vue',
+    'pages/**/*.vue',
+    'plugins/**/*.ts',
+    // 'nuxt.config.ts',
+    'content/**/*.md'
   ],
   theme: {
-    colors,
+    colors: defaultTheme.colors,
     extend: {},
   },
   plugins: [
