@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     // '@nuxtjs/sitemap'
   ],
+  css: ["~/assets/css/main.css"],
   publicRuntimeConfig: {
     app_url: process.env.APP_URL
   },
