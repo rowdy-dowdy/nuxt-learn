@@ -6,18 +6,20 @@
   Swiper.use([Pagination,Autoplay]);
 
   var swiper = null
-  const id_component = 'swiper' + '123'
+  var ref_swiper = ref<HTMLElement>(null)
 
   onMounted(() => {
-    console.log('id: ' + id_component)
-    swiper = new Swiper('#' + id_component, {
-      loop: true,
+    if (ref_swiper.value) {
+      ref_swiper.value.id =  'swiper' + new Date().getTime()
+      swiper = new Swiper('#' + ref_swiper.value.id , {
+        loop: true,
 
-      // If we need pagination
-      pagination: {
-        el: '.swiper-pagination',
-      }
-    });
+        // If we need pagination
+        pagination: {
+          el: '.swiper-pagination',
+        }
+      });
+    }
   })
 
   const list_slide = ref([
@@ -41,7 +43,7 @@
 
 <template>
   <div class="w-full">
-    <div :id="id_component" class="swiper auth_slide">
+    <div ref="ref_swiper" class="swiper auth_slide">
       <div class="swiper-wrapper">
         <div
           v-for="(value, index) in list_slide" :key="index"

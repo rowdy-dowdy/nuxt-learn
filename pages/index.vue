@@ -1,7 +1,7 @@
 <script setup lang="ts">
-definePageMeta({
-  layout: "app",
-});
+// definePageMeta({
+//   layout: "app",
+// });
 const config = useRuntimeConfig();
 // console.log(config.app_url)
 // const { data } = await useFetch(`${config.app_url}/api/hello`, {method: 'get'})

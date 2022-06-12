@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   // serverMiddleware: [
   //   '~/server-middleware/index.ts'
   // ],
-  // plugins: ['~/plugins/vue-click-outside.ts'],
+  plugins: ['~/plugins/vue-click-outside.ts'],
   buildModules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
@@ -13,7 +13,8 @@ export default defineNuxtConfig({
   ],
   css: ["~/assets/css/main.css"],
   publicRuntimeConfig: {
-    app_url: process.env.APP_URL
+    APP_URL: process.env.APP_URL,
+    KEY_OPEN_WEATHER_MAP: process.env.KEY_OPEN_WEATHER_MAP
   },
   // sitemap: {
   //   // options

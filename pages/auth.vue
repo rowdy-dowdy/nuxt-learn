@@ -2,7 +2,7 @@
 definePageMeta({
   layout: "auth",
 
-  key: route => route.path,
+  // key: route => route.fullPath,
 
   // transition: {
   //   name: 'auth',
@@ -32,24 +32,47 @@ definePageMeta({
         class="w-full h-full object-cover">
       <div class="bg-full bg-white/70"></div>
     </div>
-    <div class="relative w-full h-full mx-auto max-w-7xl">
-      <!-- <transition> -->
-        <nuxt-page />
-      <!-- </transition> -->
+    <div class="relative mx-auto max-w-7xl">
+      <transition name="auth">
+        <div :key="$route.fullPath">
+          <nuxt-page :key="$route.fullPath"/>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
 
 <style>
-  /* .auth-enter-active {
-  transition: all 3s ease;
-  }
+  .auth-enter-active,
   .auth-leave-active {
-    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    @apply transition-all duration-1000;
   }
-  .auth-enter, .auth-leave-to
+  
+  .auth-enter-to, .auth-leave-to
   {
-    transform: translateX(10px);
-    opacity: 0;
-  } */
+    @apply absolute w-full top-0 left-0;
+  }
+
+  .auth-enter-to
+  {
+    @apply z-50;
+  }
+
+  /* left */
+  .auth-enter-from .left {
+    @apply transition-all duration-1000 -translate-x-full;
+  }
+
+  .auth-enter-to .left {
+    @apply transition-all duration-1000 translate-x-0;
+  }
+
+  /* right */
+  .auth-enter-from .right {
+    @apply transition-all duration-1000 translate-x-full;
+  }
+
+  .auth-enter-to .right {
+    @apply transition-all duration-1000 translate-x-0;
+  }
 </style>

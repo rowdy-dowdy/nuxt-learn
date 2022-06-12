@@ -6,12 +6,12 @@ const is_remember    = ref(false)
 </script>
 
 <template>
-  <div class="flex h-full rounded-2xl shadow-lg overflow-hidden border border-gray-200">
-    <div class="hidden lg:flex w-1/2 bg-blue-700/90 rounded overflow-hidden h-center">
+  <div class="flex w-full h-full rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+    <div class="left hidden lg:flex w-1/2 bg-blue-700/90 rounded overflow-hidden h-center">
       <auth-slide></auth-slide>
     </div>
 
-    <div class="flex-grow min-w-0 bg-white px-6 py-8">
+    <div class="right flex-grow min-w-0 bg-white px-6 py-8">
       <div class="flex flex-col w-full h-full max-w-xs mx-auto">
         <div class="mt-12">
           <span class="grid w-16 h-16 mx-auto rounded-full bg-gray-100 border border-gray-200 place-items-center text-indigo-600">

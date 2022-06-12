@@ -126,5 +126,40 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "2bad2342-5cd3-4001-a8c2-81387635fca8",
+    "colId": "history",
+    "containerId": "",
+    "name": "https://api.openweathermap.org/data/2.5/weather?lat=21.583157762487943&lon=105.80392833219798&appid=34bde8e03028c9902942174d5269a4d7&lang=vi",
+    "url": "https://api.openweathermap.org/data/2.5/weather?lat=21.583157762487943&lon=105.80392833219798&appid=34bde8e03028c9902942174d5269a4d7&lang=vi",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2022-06-12T15:39:43.266Z",
+    "modified": "2022-06-12T15:39:52.567Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "lat",
+        "value": "21.583157762487943",
+        "isPath": false
+      },
+      {
+        "name": "lon",
+        "value": "105.80392833219798",
+        "isPath": false
+      },
+      {
+        "name": "appid",
+        "value": "34bde8e03028c9902942174d5269a4d7",
+        "isPath": false
+      },
+      {
+        "name": "lang",
+        "value": "vi",
+        "isPath": false
+      }
+    ],
+    "tests": []
   }
 ]

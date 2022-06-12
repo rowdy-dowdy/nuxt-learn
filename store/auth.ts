@@ -26,7 +26,7 @@ const actions = {
   }
 }
 
-export const useUserStore = defineStore('userStore', {
+export const useAuthStore = defineStore('authStore', {
   state,
   getters,
   actions
