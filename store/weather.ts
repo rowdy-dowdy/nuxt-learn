@@ -42,6 +42,8 @@ const actions = {
           key: config.KEY_OPEN_WEATHER_MAP
         })
 
+        console.log(data_weather)
+
         this.weather = <Weather>{
           name: data_weather.name,
           weather: {
