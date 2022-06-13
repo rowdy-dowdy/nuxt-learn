@@ -48,7 +48,7 @@ definePageMeta({
     @apply transition-all duration-1000;
   }
   
-  .auth-enter-to, .auth-leave-to
+  .auth-enter-active  
   {
     @apply absolute w-full top-0 left-0;
   }
