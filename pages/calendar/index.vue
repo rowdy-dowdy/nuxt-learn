@@ -5,9 +5,29 @@ import { Weather, useWeatherStore } from '~~/store/weather';
 const store = useWeatherStore()
 // const { items } = storeToRefs(store)
 
-const weather: Weather =  await store.getWeather()
-console.log(await weather)
+var weather = ref<Weather>(null)
+const time_format = ref('')
+var redirect_time = null
 
+onMounted(() => {
+  store.getWeather()
+  .then(res => {
+    weather.value = res
+  })
+
+  redirect_time = setInterval(() => {
+    let date_now = new Date(),
+        hours = date_now.getHours(),
+        minutes = date_now.getMinutes(),
+        ampm = hours >= 12 ? 'PM' : 'AM';
+
+    time_format.value = `${hours % 12 < 10 ? '0' + hours % 12 : hours % 12}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`
+  }, 1000);
+})
+
+onUnmounted(() => {
+  clearTimeout(redirect_time)
+})
 </script>
 
 <template>
@@ -35,9 +55,9 @@ console.log(await weather)
         <div class="flex-none"></div>
         <div v-if="weather" class="flex-none flex items-center space-x-3">
           <div class="font-semibold text-right">
-            <h5 class="text-xl">08:20 PM</h5>
-            <p class="text text-gray-500 pt-1">
-              <span class="text-[#444]">{{ weather.weather.feels_like }}°C</span> in {{weather.name}}
+            <h5 class="text-lg">{{time_format}}</h5>
+            <p class="text-sm text-gray-500 pt-0.5">
+              {{ weather.weather.feels_like }}°C
             </p>
           </div>
           <span class="icon w-14 h-14 text-teal-600">
