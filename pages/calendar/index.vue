@@ -10,10 +10,10 @@ const time_format = ref('')
 var redirect_time = null
 
 onMounted(() => {
-  store.getWeather()
-  .then(res => {
-    weather.value = res
-  })
+  // store.getWeather()
+  // .then(res => {
+  //   weather.value = res
+  // })
 
   redirect_time = setInterval(() => {
     let date_now = new Date(),
@@ -28,6 +28,8 @@ onMounted(() => {
 onUnmounted(() => {
   clearTimeout(redirect_time)
 })
+
+const calendar_tab = ref('month')
 </script>
 
 <template>
@@ -52,7 +54,20 @@ onUnmounted(() => {
 
     <div class="mt-6 rounded bg-white p-4">
       <div class="flex w-full justify-between">
-        <div class="flex-none"></div>
+        <div class="flex-none">
+          <div class="rounded bg-teal-200 p-1 flex text-teal-600 font-semibold text-sm">
+            <button class="px-3 py-2 rounded" 
+              :class="calendar_tab == 'month' && 'bg-teal-600 text-white'"
+              @click.prevent="calendar_tab = 'month'">Month</button>
+            <button class="px-3 py-2 rounded" 
+              :class="calendar_tab == 'weak' && 'bg-teal-600 text-white'"
+              @click.prevent="calendar_tab = 'weak'">Weak</button>
+            <button class="px-3 py-2 rounded" 
+              :class="calendar_tab == 'day' && 'bg-teal-600 text-white'"
+              @click.prevent="calendar_tab = 'day'">Day</button>
+          </div>
+        </div>
+
         <div v-if="weather" class="flex-none flex items-center space-x-3">
           <div class="font-semibold text-right">
             <h5 class="text-lg">{{time_format}}</h5>
@@ -77,6 +92,61 @@ onUnmounted(() => {
           </span>
         </div>
       </div>
+
+      <div class="my-6 flex justify-between">
+        <h5 class="text-xl font-semibold">September 2022</h5>
+        <div class="flex space-x-2">
+          <div class="icon p-1 border rounded-md border-teal-500 text-teal-600 cursor-pointer hover:bg-teal-600 hover:text-white">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path></svg>
+          </div>
+          <div class="icon p-1 border rounded-md border-teal-500 text-teal-600 cursor-pointer hover:bg-teal-600 hover:text-white">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-lg">
+        <div class="flex bg-teal-200 text-teal-600 rounded-t-lg border border-b-0 border-teal-300">
+          <div class="w-1/7 text-center p-2">Mon</div>
+          <div class="w-1/7 text-center p-2">Tue</div>
+          <div class="w-1/7 text-center p-2">Wed</div>
+          <div class="w-1/7 text-center p-2">Thu</div>
+          <div class="w-1/7 text-center p-2">Fri</div>
+          <div class="w-1/7 text-center p-2">Sat</div>
+          <div class="w-1/7 text-center p-2">Sun</div>
+        </div>
+        <div class="grid grid-cols-7 gap-[1px] border border-teal-300 bg-teal-300 rounded-b-lg overflow-hidden">
+          <div v-for="_ in new Array(7*4)" class="calendar_item p-4">
+            <p class="text-right">26</p>
+            <div class="mt-2 p-2 flex rounded bg-blue-100 text-blue-600">
+              <p class="flex-none text-sm">07:30 - 11:30</p>
+              <div class="flex-none ml-auto w-6 h-6 rounded-full overflow-hidden bg-green-600 border border-white"></div>
+            </div>
+            <div class="mt-2 p-2 rounded bg-amber-100">
+              <p class="font-semibold text-amber-600">Afternoon</p>
+              <p class="text-sm">13:30 - 17:30</p>
+              <div class="mt-1 flex items-center -space-x-2 overflow-hidden">
+                <div v-for="_ in new Array(5)" class="flex-none w-6 h-6 rounded-full overflow-hidden bg-green-600 border border-white"></div>
+                <div class="!ml-auto text-xs">...More</div>
+              </div>
+            </div>
+            <div class="mt-2 p-2 rounded bg-purple-100">
+              <p class="font-semibold text-purple-600">Night</p>
+              <p class="text-sm">17:30 - 23:30</p>
+              <div class="mt-1 flex items-center -space-x-2 overflow-hidden">
+                <div v-for="_ in new Array(5)" class="flex-none w-6 h-6 rounded-full overflow-hidden bg-green-600 border border-white"></div>
+                <div class="!ml-auto text-xs">...More</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </container>
 </template>
+
+<style>
+.calendar_item {
+  @apply bg-white before:content-[''] before:block before:pb-[100%] before:float-left;
+}
+</style>

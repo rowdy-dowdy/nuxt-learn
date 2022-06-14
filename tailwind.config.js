@@ -11,7 +11,11 @@ module.exports = {
   ],
   theme: {
     colors: defaultTheme.colors,
-    extend: {},
+    extend: {
+      width: {
+        '1/7': '14.285714285714286%',
+      }
+    },
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
