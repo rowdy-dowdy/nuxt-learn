@@ -8,8 +8,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json())
 
 import authRoutes from './router/auth'
+import dataRoutes from './router/data'
 
 app.use("/api/auth", authRoutes);
+app.use("/api/data", dataRoutes);
 
 import { PrismaClient } from '@prisma/client'
 import { responseError } from './utils/response';

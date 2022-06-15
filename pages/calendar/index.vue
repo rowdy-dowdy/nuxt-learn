@@ -30,6 +30,113 @@ onUnmounted(() => {
 })
 
 const calendar_tab = ref('month')
+
+
+// change month
+var months = ['January','February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+let date_now = new Date()
+const date_active = ref({
+  day: date_now.getDate(),
+  month: date_now.getMonth(),
+  year: date_now.getFullYear()
+})
+
+const list_day = ref([])
+const transiton_calendar = ref('left-to-right')
+
+const findDayInMonth = () => {
+  list_day.value = []
+
+  let first_day_of_month = new Date(date_active.value.year, date_active.value.month, 1),
+      last_day_of_month = new Date(date_active.value.year, date_active.value.month + 1, 0)
+  
+  let change_first_day = first_day_of_month.getDay() == 0 ? 7 : first_day_of_month.getDay()
+  
+  if (change_first_day > 1) {
+    let day_of_last_month = new Date(date_active.value.year, date_active.value.month , 0).getDate()
+
+    for (let i = 0; i < change_first_day - 1; i++) {
+      let temp_time = new Date().getTime() - new Date(date_active.value.year, date_active.value.month - 1, day_of_last_month - 1).getTime()
+      let check_now = temp_time >= 0 && temp_time <= 86400000
+      list_day.value.push({
+        day: day_of_last_month--,
+        active: false,
+        now: check_now
+      })
+    }
+  }
+
+  for (let i = 1; i <= last_day_of_month.getDate(); i++) {
+    let temp_time = new Date().getTime() - new Date(date_active.value.year, date_active.value.month, i).getTime()
+    let check_now = temp_time >= 0 && temp_time <= 86400000
+    list_day.value.push({
+      day: i,
+      active: true,
+      now: check_now
+    })
+  }
+
+  if (last_day_of_month.getDay() > 0) {
+    for (let i = 0; i < 7 - last_day_of_month.getDay(); i++) {
+      let temp_time = new Date().getTime() - new Date(date_active.value.year, date_active.value.month + 1, i + 1).getTime()
+      let check_now = temp_time >= 0 && temp_time <= 86400000
+      list_day.value.push({
+        day: i + 1,
+        active: false,
+        now: check_now
+      })
+    }
+  }
+}
+
+findDayInMonth()
+
+const backMonth = () => {
+  transiton_calendar.value = 'left-to-right'
+  if (date_active.value.month == 0) {
+    date_active.value.month = 11
+    date_active.value.year = date_active.value.year - 1
+  } else {
+    date_active.value.month = date_active.value.month - 1
+  }
+}
+
+const nextMonth = () => {
+  transiton_calendar.value = 'right-to-left'
+  if (date_active.value.month == 11) {
+    date_active.value.month = 0
+    date_active.value.year = date_active.value.year + 1
+  } else {
+    date_active.value.month = date_active.value.month + 1
+  }
+}
+
+const resetMonth = () => {
+  let now = new Date()
+  let temp_time = now.getTime() - new Date(date_active.value.year, date_active.value.month, date_active.value.day).getTime()
+  if (temp_time < 0) {
+    transiton_calendar.value = 'left-to-right'
+  } else if (temp_time > 86400000) {
+    transiton_calendar.value = 'right-to-left'
+  }
+  date_active.value.month = now.getMonth()
+  date_active.value.year = now.getFullYear()
+}
+
+const check_month_now = () => {
+  let now = new Date()
+  return date_active.value.day == now.getDate() 
+    && date_active.value.month == now.getMonth() 
+    && date_active.value.year == now.getFullYear()
+}
+
+watch(
+  date_active.value,
+  () => {
+    findDayInMonth()
+  }
+)
+
 </script>
 
 <template>
@@ -42,7 +149,7 @@ const calendar_tab = ref('month')
         <h3 class="font-semibold text-lg">Calendar</h3>
       </div>
 
-      <div class="flex-none flex items-center space-x-3">
+      <div class="flex-none flex items-center space-x-3 select-none">
         <span class="icon rounded bg-white p-2 text-teal-500">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path><path d="M11.412 8.586c.379.38.588.882.588 1.414h2a3.977 3.977 0 0 0-1.174-2.828c-1.514-1.512-4.139-1.512-5.652 0l1.412 1.416c.76-.758 2.07-.756 2.826-.002z"></path></svg>
         </span>
@@ -94,12 +201,22 @@ const calendar_tab = ref('month')
       </div>
 
       <div class="my-6 flex justify-between">
-        <h5 class="text-xl font-semibold">September 2022</h5>
-        <div class="flex space-x-2">
-          <div class="icon p-1 border rounded-md border-teal-500 text-teal-600 cursor-pointer hover:bg-teal-600 hover:text-white">
+        <h5 class="text-xl font-semibold">{{ months[date_active.month] }} {{ date_active.year }}</h5>
+        <div class="flex space-x-2 select-none">
+          <div 
+            :class="check_month_now() && 'scale-0'"
+            @click.prevent="resetMonth()"
+            class="icon p-1 border rounded-md border-teal-500 text-teal-600 cursor-pointer hover:bg-teal-600 hover:text-white transition-all duration-300">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M10 11H7.101l.001-.009a4.956 4.956 0 0 1 .752-1.787 5.054 5.054 0 0 1 2.2-1.811c.302-.128.617-.226.938-.291a5.078 5.078 0 0 1 2.018 0 4.978 4.978 0 0 1 2.525 1.361l1.416-1.412a7.036 7.036 0 0 0-2.224-1.501 6.921 6.921 0 0 0-1.315-.408 7.079 7.079 0 0 0-2.819 0 6.94 6.94 0 0 0-1.316.409 7.04 7.04 0 0 0-3.08 2.534 6.978 6.978 0 0 0-1.054 2.505c-.028.135-.043.273-.063.41H2l4 4 4-4zm4 2h2.899l-.001.008a4.976 4.976 0 0 1-2.103 3.138 4.943 4.943 0 0 1-1.787.752 5.073 5.073 0 0 1-2.017 0 4.956 4.956 0 0 1-1.787-.752 5.072 5.072 0 0 1-.74-.61L7.05 16.95a7.032 7.032 0 0 0 2.225 1.5c.424.18.867.317 1.315.408a7.07 7.07 0 0 0 2.818 0 7.031 7.031 0 0 0 4.395-2.945 6.974 6.974 0 0 0 1.053-2.503c.027-.135.043-.273.063-.41H22l-4-4-4 4z"></path></svg>
+          </div>
+          <div 
+            @click.prevent="backMonth()"
+            class="icon p-1 border rounded-md border-teal-500 text-teal-600 cursor-pointer hover:bg-teal-600 hover:text-white">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path></svg>
           </div>
-          <div class="icon p-1 border rounded-md border-teal-500 text-teal-600 cursor-pointer hover:bg-teal-600 hover:text-white">
+          <div 
+            @click.prevent="nextMonth()"
+            class="icon p-1 border rounded-md border-teal-500 text-teal-600 cursor-pointer hover:bg-teal-600 hover:text-white">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path></svg>
           </div>
         </div>
@@ -115,30 +232,47 @@ const calendar_tab = ref('month')
           <div class="w-1/7 text-center p-2">Sat</div>
           <div class="w-1/7 text-center p-2">Sun</div>
         </div>
-        <div class="grid grid-cols-7 gap-[1px] border border-teal-300 bg-teal-300 rounded-b-lg overflow-hidden">
-          <div v-for="_ in new Array(7*4)" class="calendar_item p-4">
-            <p class="text-right">26</p>
-            <div class="mt-2 p-2 flex rounded bg-blue-100 text-blue-600">
-              <p class="flex-none text-sm">07:30 - 11:30</p>
-              <div class="flex-none ml-auto w-6 h-6 rounded-full overflow-hidden bg-green-600 border border-white"></div>
-            </div>
-            <div class="mt-2 p-2 rounded bg-amber-100">
-              <p class="font-semibold text-amber-600">Afternoon</p>
-              <p class="text-sm">13:30 - 17:30</p>
-              <div class="mt-1 flex items-center -space-x-2 overflow-hidden">
-                <div v-for="_ in new Array(5)" class="flex-none w-6 h-6 rounded-full overflow-hidden bg-green-600 border border-white"></div>
-                <div class="!ml-auto text-xs">...More</div>
+
+        <div class="relative overflow-hidden">
+          <transition :name="transiton_calendar">
+            <div :key="date_active.month" class="grid grid-cols-7 gap-[1px] border border-teal-300 bg-teal-300 rounded-b-lg overflow-hidden">
+              <div v-for="(v,i) in list_day" :key="i" class="calendar_item p-4" :class="v.now && 'now'">
+                <p class="-mt-3 text-base text-right uppercase font-semibold"
+                  :class="!v.active && 'text-gray-400'">{{ v.day }}</p>
+                <div class="task green">
+                  <div class="line"></div>
+                  <div class="text">
+                    <h3 class="text-sm font-semibold">Việt Hùng</h3>
+                    <div class="flex items-center space-x-2">
+                      <div class="avatar"></div>
+                      <p class="text-xs">07:34 - 11:35 | 02:34 h</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="task red">
+                  <div class="line"></div>
+                  <div class="text">
+                    <h3 class="text-sm font-semibold">Việt Hùng</h3>
+                    <div class="flex items-center space-x-2">
+                      <div class="avatar"></div>
+                      <p class="text-xs">07:34 - 11:35 | 02:34 h</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="task yellow">
+                  <div class="line"></div>
+                  <div class="text">
+                    <h3 class="text-sm font-semibold">Việt Hùng</h3>
+                    <div class="flex items-center space-x-2">
+                      <div class="avatar"></div>
+                      <p class="text-xs">07:34 - 11:35 | 02:34 h</p>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="text-center mt-3 font-semibold text-teal-600">+5 more</div>
               </div>
             </div>
-            <div class="mt-2 p-2 rounded bg-purple-100">
-              <p class="font-semibold text-purple-600">Night</p>
-              <p class="text-sm">17:30 - 23:30</p>
-              <div class="mt-1 flex items-center -space-x-2 overflow-hidden">
-                <div v-for="_ in new Array(5)" class="flex-none w-6 h-6 rounded-full overflow-hidden bg-green-600 border border-white"></div>
-                <div class="!ml-auto text-xs">...More</div>
-              </div>
-            </div>
-          </div>
+          </transition>
         </div>
       </div>
     </div>
@@ -147,6 +281,90 @@ const calendar_tab = ref('month')
 
 <style>
 .calendar_item {
-  @apply bg-white before:content-[''] before:block before:pb-[100%] before:float-left;
+  @apply bg-white before:content-[''] before:block before:pb-[50%] before:float-left;
+}
+
+.calendar_item.now {
+  @apply bg-teal-200 text-teal-600;
+}
+
+
+/* calendar task */
+.calendar_item .task {
+  @apply mt-2 p-2 rounded bg-teal-100 flex;
+}
+.calendar_item .task .line {
+  @apply flex-none w-1.5 rounded-full bg-teal-400;
+}
+.calendar_item .task .text {
+  @apply ml-2 flex-grow text-teal-600;
+}
+.calendar_item .task .avatar {
+  @apply flex-none w-6 h-6 rounded-full overflow-hidden bg-teal-600;
+}
+
+.calendar_item .task.green {
+  @apply mt-2 p-2 rounded bg-green-100 flex;
+}
+.calendar_item .task.green .line {
+  @apply flex-none w-1.5 rounded-full bg-green-400;
+}
+.calendar_item .task.green .text {
+  @apply ml-2 flex-grow text-green-600;
+}
+.calendar_item .task.green .avatar {
+  @apply flex-none w-6 h-6 rounded-full overflow-hidden bg-green-400;
+}
+
+.calendar_item .task.yellow {
+  @apply mt-2 p-2 rounded bg-yellow-100 flex;
+}
+.calendar_item .task.yellow .line {
+  @apply flex-none w-1.5 rounded-full bg-yellow-400;
+}
+.calendar_item .task.yellow .text {
+  @apply ml-2 flex-grow text-yellow-600;
+}
+.calendar_item .task.yellow .avatar {
+  @apply flex-none w-6 h-6 rounded-full overflow-hidden bg-yellow-400;
+}
+
+.calendar_item .task.red {
+  @apply mt-2 p-2 rounded bg-rose-100 flex;
+}
+.calendar_item .task.red .line {
+  @apply flex-none w-1.5 rounded-full bg-rose-400;
+}
+.calendar_item .task.red .text {
+  @apply ml-2 flex-grow text-rose-600;
+}
+.calendar_item .task.red .avatar {
+  @apply flex-none w-6 h-6 rounded-full overflow-hidden bg-rose-400;
+}
+
+/* transition calendar */
+.left-to-right-enter-active,
+.left-to-right-leave-active,
+.right-to-left-enter-active,
+.right-to-left-leave-active {
+  transition: all .5s linear;
+}
+.left-to-right-enter-active,
+.right-to-left-enter-active
+{
+  @apply absolute w-full top-0 left-0;
+}
+
+.left-to-right-enter-from,
+.right-to-left-leave-to {
+  transform: translateX(-100%);
+}
+/* .left-to-right-enter-to,
+.left-to-right-leave-from {
+  transform: translateX(0);
+} */
+.left-to-right-leave-to,
+.right-to-left-enter-from {
+  transform: translateX(100%);
 }
 </style>
