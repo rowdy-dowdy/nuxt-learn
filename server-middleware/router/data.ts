@@ -37,8 +37,6 @@ const addStaff = async (req, res) => {
       }]
     },[])
 
-    console.log(data_create)
-
     const staffs = await prisma.staffs.createMany({
       data: data_create,
       skipDuplicates: true
@@ -59,10 +57,29 @@ const addStaff = async (req, res) => {
 
 const getAttendances = async (req, res) => {
   try {
-    const attendances = await prisma.attendances.findMany()
+    let first_day = req.query?.first_day || null,
+        last_day = req.query?.last_day || null
+
+    var attendances = null
+
+    if (first_day && last_day) {
+      attendances = await prisma.attendances.findMany({
+        where: {
+          record_time: {
+            lte: new Date(last_day),
+            gte: new Date(first_day)
+          }
+        }
+      })
+    }
+    else {
+      attendances = await prisma.attendances.findMany()
+    }
 
     res.status(200).json({
-      attendances
+      attendances,
+      first_day,
+      last_day
     });
 
   } catch (error) {
@@ -86,14 +103,14 @@ const addAttendances = async (req, res) => {
       }]
     },[])
 
-    console.log('2')
+    const staffs = await prisma.staffs.findMany()
+
+    const data_create_filter = data_create.filter(v => staffs.findIndex(v2 => v2.uid == v.staff_uid) >= 0)
 
     const attendances = await prisma.attendances.createMany({
-      data: data_create,
+      data: data_create_filter,
       skipDuplicates: true
     })
-
-    console.log('3')
 
     res.status(200).json({
       message: 'Thành công',

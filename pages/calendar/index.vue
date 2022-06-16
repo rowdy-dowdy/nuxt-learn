@@ -31,7 +31,6 @@ onUnmounted(() => {
 
 const calendar_tab = ref('month')
 
-
 // change month
 var months = ['January','February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 let date_now = new Date()
@@ -41,16 +40,71 @@ const date_active = ref({
   year: date_now.getFullYear()
 })
 
+const first_day = ref(new Date(date_active.value.year, date_active.value.month, 1))
+const last_day = ref(new Date(date_active.value.year, date_active.value.month + 1, 0))
+
+// data calendar
+const config = useRuntimeConfig();
+const [{ data: data_staffs }, { data: data_attendances, pending, refresh, error }] = await Promise.all([
+  useFetch(`${config.APP_URL}/api/data/staffs`),
+  useFetch(() => `/api/data/attendances?first_day=${first_day.value.toLocaleDateString("en-US")}&last_day=${last_day.value.toLocaleDateString("en-US")}`, { baseURL: config.APP_URL })
+])
+
 const list_day = ref([])
 const transiton_calendar = ref('left-to-right')
+
+const filterDay = (day: number, arr: Array<any>) => {
+  let data_in_day = arr.filter(v => new Date(v.record_time).getDate() == day )
+
+  // data_in_day.forEach(v => {
+  //   arr.splice(arr.findIndex(i => i.id == v.id), 1)
+  // })
+
+  let data_group = data_in_day.reduce((pre,cur) => {
+    if (!pre[cur.staff_uid]) {
+      pre[cur.staff_uid] = [];
+    }
+
+    // Grouping
+    pre[cur.staff_uid].push(cur);
+
+    return pre
+  },{})
+
+  let data_format = []
+
+  for (var key of Object.keys(data_group)) {
+    let staff_temp = (data_staffs.value as any).staffs.find(v => v.uid == key)
+
+    if(staff_temp) {
+      let first_time = data_group[key].reduce((p, c) => { return new Date(p?.record_time).getTime() <= new Date(c?.record_time).getTime() ? p : c })?.record_time,
+          last_time = data_group[key].reduce((p, c) => { return new Date(p?.record_time).getTime() >= new Date(c?.record_time).getTime() ? p : c })?.record_time
+      
+      let betwwen_time = Math.abs(new Date(first_time).getTime() -new Date(last_time).getTime())
+
+      data_format.push({
+        name: staff_temp.name,
+        first_time,
+        last_time,
+        hours: `${Math.ceil(new Date(first_time).getTime()/1000/60/60)}:${Math.ceil(new Date(first_time).getTime()/1000/60%60)} 
+          - ${Math.ceil(new Date(last_time).getTime()/1000/60/60)}:${Math.ceil(new Date(last_time).getTime()/1000/60%60)} 
+          | ${Math.ceil(betwwen_time/1000/60/60)}:${Math.ceil(betwwen_time/1000/60%60)} h`
+      })
+    }
+  }
+
+  return data_format
+}
 
 const findDayInMonth = () => {
   list_day.value = []
 
-  let first_day_of_month = new Date(date_active.value.year, date_active.value.month, 1),
-      last_day_of_month = new Date(date_active.value.year, date_active.value.month + 1, 0)
+  first_day.value = new Date(date_active.value.year, date_active.value.month, 1)
+  last_day.value = new Date(date_active.value.year, date_active.value.month + 1, 0)
+
+  refresh()
   
-  let change_first_day = first_day_of_month.getDay() == 0 ? 7 : first_day_of_month.getDay()
+  let change_first_day = first_day.value.getDay() == 0 ? 7 : first_day.value.getDay()
   
   if (change_first_day > 1) {
     let day_of_last_month = new Date(date_active.value.year, date_active.value.month , 0).getDate()
@@ -61,29 +115,32 @@ const findDayInMonth = () => {
       list_day.value.push({
         day: day_of_last_month--,
         active: false,
-        now: check_now
+        now: check_now,
+        staffs: []
       })
     }
   }
 
-  for (let i = 1; i <= last_day_of_month.getDate(); i++) {
+  for (let i = 1; i <= last_day.value.getDate(); i++) {
     let temp_time = new Date().getTime() - new Date(date_active.value.year, date_active.value.month, i).getTime()
     let check_now = temp_time >= 0 && temp_time <= 86400000
     list_day.value.push({
       day: i,
       active: true,
-      now: check_now
+      now: check_now,
+      staffs: filterDay(i, (data_attendances.value as any).attendances)
     })
   }
 
-  if (last_day_of_month.getDay() > 0) {
-    for (let i = 0; i < 7 - last_day_of_month.getDay(); i++) {
+  if (last_day.value.getDay() > 0) {
+    for (let i = 0; i < 7 - last_day.value.getDay(); i++) {
       let temp_time = new Date().getTime() - new Date(date_active.value.year, date_active.value.month + 1, i + 1).getTime()
       let check_now = temp_time >= 0 && temp_time <= 86400000
       list_day.value.push({
         day: i + 1,
         active: false,
-        now: check_now
+        now: check_now,
+        staffs: []
       })
     }
   }
@@ -239,13 +296,13 @@ watch(
               <div v-for="(v,i) in list_day" :key="i" class="calendar_item p-4" :class="v.now && 'now'">
                 <p class="-mt-3 text-base text-right uppercase font-semibold"
                   :class="!v.active && 'text-gray-400'">{{ v.day }}</p>
-                <div class="task green">
+                <div v-for="(staff, staff_index) in v.staffs.slice(0, 3)" :key="staff_index" class="task green">
                   <div class="line"></div>
                   <div class="text">
-                    <h3 class="text-sm font-semibold">Việt Hùng</h3>
+                    <h3 class="text-sm font-semibold">{{ staff.name }}</h3>
                     <div class="flex items-center space-x-2">
                       <div class="avatar"></div>
-                      <p class="text-xs">07:34 - 11:35 | 02:34 h</p>
+                      <p class="text-xs">{{ staff.hours }}</p>
                     </div>
                   </div>
                 </div>
@@ -269,7 +326,7 @@ watch(
                     </div>
                   </div>
                 </div> -->
-                <div class="text-center mt-3 font-semibold text-teal-600">+5 more</div>
+                <div v-if="v.staffs.length > 3" class="text-center mt-3 font-semibold text-teal-600">+{{v.staffs.length - 3}} more</div>
               </div>
             </div>
           </transition>
